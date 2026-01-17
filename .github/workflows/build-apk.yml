@@ -1,0 +1,33 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # MANUAL Flutter setup (fixes Problem 1)
+      - name: Setup Flutter
+        run: |
+          git clone https://github.com/flutter/flutter.git -b stable
+          echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+
+      - name: Install Packages
+        run: |
+          flutter --version
+          flutter pub get
+
+      # Build UNIVERSAL APK (fixes Problem 2)
+      - name: Build Universal APK
+        run: flutter build apk --release --split-per-abi=false
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
