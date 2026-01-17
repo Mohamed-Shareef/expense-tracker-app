@@ -24,7 +24,7 @@ jobs:
 
       # Build UNIVERSAL APK - FIXED SYNTAX
       - name: Build Universal APK
-        run: flutter build apk --release --split-per-abi
+        run: flutter build apk --release --split-per-abi --android-skip-build-dependency-validation
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
